@@ -91,3 +91,23 @@ class QuestionIdexViewTests(TestCase):
         past_question_2 = create_question(question_text='Past question 2', days=-30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(response.context['latest_question_list'], [past_question_2, past_question_1])
+
+
+class QuestionDetailViewTest(TestCase):
+    def test_future_question(self):
+        """
+        If a question with pub_date in the future exists, it returns a 404 error.
+        """
+        future_question = create_question(question_text='Future question', days=30)
+        url = reverse('polls:detail', args=(future_question.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
+    def test_past_question(self):
+        """
+        The detail of a quiestion with pub_date in the past is shown.
+        """
+        past_question = create_question(question_text='Past question', days=-30)
+        url = reverse('polls:detail', args=(past_question.id,))
+        response = self.client.get(url)
+        self.assertContains(response, past_question.question_text)
