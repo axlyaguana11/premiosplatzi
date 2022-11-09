@@ -1,3 +1,9 @@
 asgiref==3.5.2
+build==0.9.0
 Django==4.1.2
+django-polls==0.1
+packaging==21.3
+pep517==0.13.0
+pyparsing==3.0.9
 sqlparse==0.4.3
+tomli==2.0.1
